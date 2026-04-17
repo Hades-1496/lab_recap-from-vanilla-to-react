@@ -1,14 +1,13 @@
 let userDiv = document.getElementById("user-list-container");
 let button = document.getElementById("load-more-btn");
-
+let count = 0;
 const API_URL = "https://dummyjson.com/users";
 
 async function loadUsers() {
   try {
-    const response = await fetch(API_URL);
+    
+    const response = await fetch(API_URL+"?limit="+10+"&skip="+count);
     const data = await response.json();
-    userDiv.innerHTML = `
-                                    `;
     userDiv.innerHTML += data.users.map(
       (x) => `
         
@@ -34,12 +33,19 @@ async function loadUsers() {
                 </tbody></table>
                 </div>`,
     ).join('');
-    userDiv.innerHTML += "";
+    count=count+10;
+    if (count >= 30) {
+      button.removeEventListener("click", loadUsers);
+      button.classList.toggle("disabled");
+    } 
+
+    
   } catch (error) {
     userDiv.innerHTML = `<div class=user-card">
                             <p>Error: ", ${error}</p>
                         </div>`;
   }
 }
-
-button.addEventListener("click", loadUsers);
+if (count < 30) {
+  button.addEventListener("click", loadUsers);
+}

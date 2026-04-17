@@ -40,6 +40,6 @@ button {
   border-radius: 5px;
 }
 
-button:disabled {
+.disabled {
   background-color: #aaa;
 }
